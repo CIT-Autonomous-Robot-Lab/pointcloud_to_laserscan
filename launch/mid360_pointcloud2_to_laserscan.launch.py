@@ -3,6 +3,19 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    
+    define_livox_frame = Node(
+        package = 'tf2_ros',
+        executable = 'static_transform_publisher',
+        name = 'define_livox_frame',
+        namespace = '',
+        output = 'screen',
+        arguments = [
+            '--x', '0.1012', '--y', '0', '--z', '0.177',
+            '--qx', '0', '--qy', '0', '--qz', '0', '--qw', '1',
+            '--frame-id', 'base_link', '--child-frame-id', 'livox_frame',
+        ],
+    )
 
     pc2_to_scan = Node(
         package='pointcloud_to_laserscan',
@@ -28,6 +41,7 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
+    ld.add_action(define_livox_frame)
     ld.add_action(pc2_to_scan)
 
     return ld
